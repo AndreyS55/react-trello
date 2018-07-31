@@ -4,7 +4,7 @@ import List from './List'; // импортируем компонент List и�
 class KanbanBoard extends Component {
     render() {
         return (
-            <div className="app">
+            <div className="app">					//this.props.cards берется из cardsList???
                 <List id='todo' title="To Do" cards={this.props.cards.filter((card) => card.status === "todo")}/> // метод arr.filter создает новый массив, в который войдут элементы с card.status === to do.
                 <List id='in-progress' title="In Progress" cards={this.props.cards.filter((card) => card.status === "in-progress")}/>
                 <List id='done' title='Done' cards={this.props.cards.filter((card) => card.status === "done")}/>
