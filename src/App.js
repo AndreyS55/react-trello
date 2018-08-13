@@ -1,6 +1,6 @@
-import React, {Component} from 'react'; //импортируем объекты из библиотеки react;
-import {render} from 'react-dom'; //импортируем метод render() из библиотеки react-dom;
-import KanbanBoard from './KanbanBoard'; // импортируем компонент KanbanBoard из файла KanbanBoard.js;
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+import KanbanBoard from './KanbanBoard';
 
 //создаем массив cardList со списком задач; в дальнейшем список задач будет поступать с сервера;
 let cardsList = [
@@ -35,5 +35,5 @@ let cardsList = [
         ]
     }
 ];
-//отрисовывем комонент KanbanBoard в HTML, добавляем в него свойство cards;
+
 render(<KanbanBoard cards={cardsList} />, document.getElementById('root'));
