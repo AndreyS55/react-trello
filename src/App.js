@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import KanbanBoard from './KanbanBoard';
+import KanbanBoardContainer from './KanbanBoardContainer';
 
 //создаем массив cardList со списком задач; в дальнейшем список задач будет поступать с сервера;
 let cardsList = [
@@ -8,13 +8,15 @@ let cardsList = [
         id: 1,
         title: "Read the Book",
         description: "I should read the whole book",
+        color: '#BD8D31',
         status: "in-progress",
         tasks: []
     },
     {
         id: 2,
         title: "Write some code",
-        description: "Code along with the samples in the book",
+        description: "Code along with the samples in the book. The complete source can be found at [github](https://github.com/pro-react)",
+        color: '#3A7E28',
         status: "todo",
         tasks: [
             {
@@ -36,4 +38,4 @@ let cardsList = [
     }
 ];
 
-render(<KanbanBoard cards={cardsList} />, document.getElementById('root'));
+render(<KanbanBoardContainer />, document.getElementById('root'));
