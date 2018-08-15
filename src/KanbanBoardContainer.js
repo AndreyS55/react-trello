@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:3000';
 const API_HEADERS = {
     'Content-Type': 'application/json',
     //Authorization: 'any-string' (the authorization is not needed for local server)
-}
+};
 
 class KanbanBoardContainer extends Component {
     constructor() {
@@ -27,8 +27,25 @@ class KanbanBoardContainer extends Component {
             });
     }
 
+    addTask(cardId, taskName){
+
+    }
+
+    deleteTask(cardId, taskId, taskIndex) {
+
+    }
+
+    toggleTask(cardId, taskId, taskIndex) {
+
+    }
+
     render() {
-        return <KanbanBoard cards={this.state.cards} />
+        return <KanbanBoard cards={this.state.cards}
+                            taskCallbacks={{
+                                toggle: this.toggleTask.bind(this),
+                                delete: this.deleteTask.bind(this),
+                                add: this.addTask.bind(this)
+                            }}/>
     }
 }
 
