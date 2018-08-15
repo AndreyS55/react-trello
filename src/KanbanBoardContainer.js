@@ -28,6 +28,7 @@ class KanbanBoardContainer extends Component {
     }
 
     addTask(cardId, taskName){
+        let prevState = this.state;
         let cardIndex = this.state.cards.findIndex((card)=>card.id == cardId);
         let newTask = {id: Date.now(), name: taskName, done: false};
         let nextState = update(this.state.cards, {
@@ -41,14 +42,24 @@ class KanbanBoardContainer extends Component {
             headers: API_HEADERS,
             body: JSON.stringify(newTask)
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Server response wasn't OK");
+                }
+                return response.json();
+            })
             .then((responseData) => {
                 newTask.id = responseData.id;
                 this.setState({cards: nextState});
+            })
+            .catch((error) => {
+                console.error("Fetch error:", error);
+                this.setState(prevState);
             });
     }
 
     deleteTask(cardId, taskId, taskIndex) {
+        let prevState = this.state;
         let cardIndex = this.state.cards.findIndex((card)=>card.id == cardId);
         let nextState = update(this.state.cards, {
             [cardIndex]: {
@@ -59,10 +70,20 @@ class KanbanBoardContainer extends Component {
         fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
             method: 'delete',
             headers: API_HEADERS
-        });
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Server response wasn't OK");
+                }
+            })
+            .catch((error) => {
+                console.error("Fetch error:", error);
+                this.setState(prevState);
+            });
     }
 
     toggleTask(cardId, taskId, taskIndex) {
+        let prevState = this.state;
         let cardIndex = this.state.cards.findIndex((card)=>card.id == cardId);
         let newDoneValue;
         let nextState = update(this.state.cards, {
@@ -84,7 +105,16 @@ class KanbanBoardContainer extends Component {
             method: 'put',
             headers: API_HEADERS,
             body: JSON.stringify({done: newDoneValue})
-        });
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Server response wasn't OK");
+                }
+            })
+            .catch((error) => {
+                console.error("Fetch error:", error);
+                this.setState(prevState);
+            });
     }
 
     render() {
