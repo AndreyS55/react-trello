@@ -6,6 +6,7 @@
     "marked": "^0.4.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4"
   },
