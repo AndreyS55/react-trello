@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import KanbanBoard from './KanbanBoard';
 import 'whatwg-fetch';
+import update from 'react-addons-update';
 
 const API_URL = 'http://localhost:3000';
 const API_HEADERS = {
