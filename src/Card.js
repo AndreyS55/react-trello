@@ -34,8 +34,12 @@ let collectDrop = (connect, monitor) => {
 const cardDragSpec = {
     beginDrag(props) {
         return {
-            id: props.id
+            id: props.id,
+            status: props.status
         };
+    },
+    endDrag(props) {
+        props.cardCallbacks.persistCardDrag(props.id, props.status);
     }
 };
 
