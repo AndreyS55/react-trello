@@ -1,20 +1,32 @@
-import React, { Component } from 'react'; //импортируем объекты из библиотеки react;
-import Card from './Card'; // импортируем компонент Card из файла Card.js;
-//создаем компонент List
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Card from './Card';
+
 class List extends Component {
     render() {
-        var cards = this.props.cards.map((card) => { //метод arr.map() возвращает новый массив и записывает его в cards;
-            return <Card id={card.id} //зачем здесь Card? Почему card.id, а не this.props.cards.id?
+        var cards = this.props.cards.map((card) => {
+            return <Card key={card.id}
+                         id={card.id}
                          title={card.title}
                          description={card.description}
-                         tasks={card.tasks} />
+                         color={card.color}
+                         tasks={card.tasks}
+                         taskCallbacks={this.props.taskCallbacks}
+            />
         });
         return (
             <div className="list">
-                <h1>{this.props.title}</h1> //здесь this.props.title относится к List?
+                <h1>{this.props.title}</h1>
                 {cards}
             </div>
         );
     }
 }
+
+List.propTypes = {
+    title: PropTypes.string.isRequired,
+    cards: PropTypes.arrayOf(PropTypes.object),
+    taskCallbacks: PropTypes.object
+};
+
 export default List;
