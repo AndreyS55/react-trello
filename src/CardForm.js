@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 class CardForm extends Component {
+
     handleChange(field, e){
         this.props.handleChange(field, e.target.value);
     }
+
     handleClose(e){
         e.preventDefault();
         this.props.handleClose();
     }
+
     render(){
         return (
             <div>
@@ -19,11 +22,11 @@ class CardForm extends Component {
                                onChange={this.handleChange.bind(this,'title')}
                                placeholder="Title"
                                required={true}
-                               autoFocus={true} />
+                               autoFocus={true} /><br />
                         <textarea value={this.props.draftCard.description}
                                   onChange={this.handleChange.bind(this,'description')}
                                   placeholder="Description"
-                                  required={true} />
+                                  required={true} /><br />
                         <label htmlFor="status">Status</label>
                         <select id="status"
                                 value={this.props.draftCard.status}
@@ -39,6 +42,7 @@ class CardForm extends Component {
                                onChange={this.handleChange.bind(this,'color')}
                                type="color"
                                defaultValue="#ff0000" />
+
                         <div className='actions'>
                             <button type="submit">{this.props.buttonLabel}</button>
                         </div>

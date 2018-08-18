@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
-import CheckList from './CheckList';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import marked from 'marked';
 import { DragSource, DropTarget } from 'react-dnd';
 import constants from './constants';
+import CheckList from './CheckList';
+
+import {Link} from 'react-router';
 
 let titlePropType = (props, propName, componentName) => {
     if (props[propName]) {
-        let value = propName[propName];
+        let value = props[propName];
         if (typeof value !== 'string' || value.length > 80) {
             return new Error(
                 `${propName} in ${componentName} is longer than 80 characters`
@@ -16,20 +18,6 @@ let titlePropType = (props, propName, componentName) => {
         }
     }
 };
-
-const cardDropSpec = {
-    hover(props, monitor) {
-        const draggedId = monitor.getItem().id;
-        props.cardCallbacks.updatePosition(draggedId, props.id);
-    }
-};
-
-let collectDrop = (connect, monitor) => {
-    return {
-        connectDropTarget: connect.dropTarget()
-    };
-};
-
 
 const cardDragSpec = {
     beginDrag(props) {
@@ -43,9 +31,22 @@ const cardDragSpec = {
     }
 };
 
+const cardDropSpec = {
+    hover(props, monitor) {
+        const draggedId = monitor.getItem().id;
+        props.cardCallbacks.updatePosition(draggedId, props.id);
+    }
+};
+
 let collectDrag = (connect, monitor) => {
     return {
         connectDragSource: connect.dragSource()
+    };
+};
+
+let collectDrop = (connect, monitor) => {
+    return {
+        connectDropTarget: connect.dropTarget(),
     };
 };
 
@@ -61,8 +62,8 @@ class Card extends Component {
         this.setState({showDetails: !this.state.showDetails});
     }
 
-    render() {
 
+    render() {
         const { connectDragSource, connectDropTarget } = this.props;
 
         let cardDetails;
@@ -70,9 +71,11 @@ class Card extends Component {
             cardDetails = (
                 <div className="card__details">
                     <span dangerouslySetInnerHTML={{__html:marked(this.props.description)}} />
-                    <CheckList cardId={this.props.id} tasks={this.props.tasks} taskCallbacks={this.props.taskCallbacks}/>
+                    <CheckList cardId={this.props.id}
+                               tasks={this.props.tasks}
+                               taskCallbacks={this.props.taskCallbacks} />
                 </div>
-            )
+            );
         }
 
         let sideColor = {
@@ -87,25 +90,22 @@ class Card extends Component {
 
         return connectDropTarget(connectDragSource(
             <div className="card">
-                <div style={sideColor}/>
-                <div
-                    className={
-                        this.state.showDetails ? "card__title card__title--is-open" : "card__title"
-                    }
-                    onClick={this.toggleDetails.bind(this)}
-                >
+                <div style={sideColor} />
+                <div className="card__edit"><Link to={'/edit/'+this.props.id}>✎</Link></div>
+                <div className={
+                    this.state.showDetails? "card__title card__title--is-open" : "card__title"
+                } onClick={this.toggleDetails.bind(this)}>
                     {this.props.title}
                 </div>
                 <ReactCSSTransitionGroup transitionName="toggle"
                                          transitionEnterTimeout={250}
-                                         transitionLeaveTimeout={250} >
+                                         transitionLeaveTimeout={250}>
                     {cardDetails}
-                </ ReactCSSTransitionGroup>
+                </ReactCSSTransitionGroup>
             </div>
-        ))
+        ));
     }
 }
-
 Card.propTypes = {
     id: PropTypes.number,
     title: titlePropType,
@@ -113,6 +113,7 @@ Card.propTypes = {
     color: PropTypes.string,
     tasks: PropTypes.arrayOf(PropTypes.object),
     taskCallbacks: PropTypes.object,
+    cardCallbacks: PropTypes.object,
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired
 };

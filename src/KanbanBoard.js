@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import List from './List';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { Link } from 'react-router';
+import List from './List';
 
 class KanbanBoard extends Component {
-    render() {
-
+    render(){
         let cardModal=this.props.children && React.cloneElement(this.props.children, {
             cards: this.props.cards,
             cardCallbacks: this.props.cardCallbacks
@@ -14,21 +14,33 @@ class KanbanBoard extends Component {
 
         return (
             <div className="app">
-                <List taskCallbacks={this.props.taskCallbacks} cardCallbacks={this.props.cardCallbacks} id='todo' title="To Do" cards={this.props.cards.filter((card) => card.status === "todo")}/>
-                <List taskCallbacks={this.props.taskCallbacks} cardCallbacks={this.props.cardCallbacks} id='in-progress' title="In Progress" cards={this.props.cards.filter((card) => card.status === "in-progress")}/>
-                <List taskCallbacks={this.props.taskCallbacks} cardCallbacks={this.props.cardCallbacks} id='done' title='Done' cards={this.props.cards.filter((card) => card.status === "done")}/>
+                <Link to='/new' className="float-button">+</Link>
+
+                <List id='todo'
+                      title="To Do"
+                      cards={this.props.cards.filter((card) => card.status === "todo")}
+                      cardCallbacks={this.props.cardCallbacks}
+                      taskCallbacks={this.props.taskCallbacks} />
+                <List id='in-progress'
+                      title="In Progress"
+                      cards={this.props.cards.filter((card) => card.status === "in-progress")}
+                      cardCallbacks={this.props.cardCallbacks}
+                      taskCallbacks={this.props.taskCallbacks} />
+                <List id='done'
+                      title='Done'
+                      cards={this.props.cards.filter((card) => card.status === "done")}
+                      cardCallbacks={this.props.cardCallbacks}
+                      taskCallbacks={this.props.taskCallbacks} />
 
                 {cardModal}
-
             </div>
         );
     }
 }
-
 KanbanBoard.propTypes = {
     cards: PropTypes.arrayOf(PropTypes.object),
-    taskCallbacks: PropTypes.object,
-    cardCallbacks: PropTypes.object
+    cardCallbacks: PropTypes.object,
+    taskCallbacks: PropTypes.object
 };
 
 export default DragDropContext(HTML5Backend)(KanbanBoard);
