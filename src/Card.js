@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import PropTypes from 'prop-types';
 import CheckList from './CheckList';
 import marked from 'marked';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import constants from './constants';
 
 let titlePropType = (props, propName, componentName) => {
@@ -11,12 +11,25 @@ let titlePropType = (props, propName, componentName) => {
         let value = propName[propName];
         if (typeof value !== 'string' || value.length > 80) {
             return new Error(
-               `${propName} in ${componentName} is longer than 80 characters`
+                `${propName} in ${componentName} is longer than 80 characters`
             );
-
         }
     }
 };
+
+const cardDropSpec = {
+    hover(props, monitor) {
+        const draggedId = monitor.getItem().id;
+        props.cardCallbacks.updatePosition(draggedId, props.id);
+    }
+};
+
+let collectDrop = (connect, monitor) => {
+    return {
+        connectDropTarget: connect.dropTarget()
+    };
+};
+
 
 const cardDragSpec = {
     beginDrag(props) {
@@ -46,16 +59,16 @@ class Card extends Component {
 
     render() {
 
-        const { connectDragSource } = this.props;
+        const { connectDragSource, connectDropTarget } = this.props;
 
         let cardDetails;
         if (this.state.showDetails) {
             cardDetails = (
                 <div className="card__details">
                     <span dangerouslySetInnerHTML={{__html:marked(this.props.description)}} />
-                    <CheckList cardId={this.props.id} tasks={this.props.tasks} taskCallbacks={this.props.taskCallbacks} />
+                    <CheckList cardId={this.props.id} tasks={this.props.tasks} taskCallbacks={this.props.taskCallbacks}/>
                 </div>
-            );
+            )
         }
 
         let sideColor = {
@@ -68,7 +81,7 @@ class Card extends Component {
             backgroundColor: this.props.color
         };
 
-        return connectDragSource(
+        return connectDropTarget(connectDragSource(
             <div className="card">
                 <div style={sideColor}/>
                 <div
@@ -82,21 +95,24 @@ class Card extends Component {
                 <ReactCSSTransitionGroup transitionName="toggle"
                                          transitionEnterTimeout={250}
                                          transitionLeaveTimeout={250} >
-                {cardDetails}
+                    {cardDetails}
                 </ ReactCSSTransitionGroup>
             </div>
-        );
+        ))
     }
 }
 
 Card.propTypes = {
-  id: PropTypes.number,
-  title: titlePropType,
-  description: PropTypes.string,
-  color: PropTypes.string,
-  tasks: PropTypes.arrayOf(PropTypes.object),
-  taskCallbacks: PropTypes.object,
-  connectDragSource: PropTypes.func.isRequired
+    id: PropTypes.number,
+    title: titlePropType,
+    description: PropTypes.string,
+    color: PropTypes.string,
+    tasks: PropTypes.arrayOf(PropTypes.object),
+    taskCallbacks: PropTypes.object,
+    connectDragSource: PropTypes.func.isRequired,
+    connectDropTarget: PropTypes.func.isRequired
 };
 
-export default DragSource(constants.CARD, cardDragSpec, collectDrag)(Card);
+const dragHighOrderCard = DragSource(constants.CARD, cardDragSpec, collectDrag)(Card);
+const dragDropHighOrderCard = DropTarget(constants.CARD, cardDropSpec, collectDrop)(dragHighOrderCard);
+export default dragDropHighOrderCard
