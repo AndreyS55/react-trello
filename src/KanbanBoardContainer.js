@@ -3,10 +3,10 @@ import KanbanBoard from './KanbanBoard';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://kanbanapi.pro-react.com';
 const API_HEADERS = {
-    'Content-Type': 'application/json',
-    //Authorization: 'any-string' (the authorization is not needed for local server)
+   'Content-Type': 'application/json',
+    Authorization: 'any-string' //(the authorization is not needed for local server)
 };
 
 class KanbanBoardContainer extends Component {
