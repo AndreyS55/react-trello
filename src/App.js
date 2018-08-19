@@ -1,11 +1,15 @@
 import React from 'react';
 import {render} from 'react-dom';
-import { Router, Route } from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { Router, Route } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import KanbanBoardContainer from './KanbanBoardContainer';
 import KanbanBoard from './KanbanBoard';
 import EditCard from './EditCard';
 import NewCard from './NewCard';
+import { Wrapper } from './Wrapper'
+
+export const history = createHistory();
+
 
 /*let cardsList = [
     {
@@ -42,13 +46,25 @@ import NewCard from './NewCard';
     }
 ];*/
 
-render((
-    <Router history={createBrowserHistory()}>
-        <Route component={KanbanBoardContainer}>
-            <Route path="/" component={KanbanBoard}>
-                <Route path="new" component={NewCard} />
-                <Route path="edit/:card_id" component={EditCard} />
-            </Route>
-        </Route>
-    </Router>
-), document.getElementById('root'));
+// render((
+//
+// ), document.getElementById('root'));
+//
+// export default App;
+
+export class App extends React.Component {
+    render() {
+        return(
+            <Router history={history}>
+                <Route path="/">
+                    <KanbanBoardContainer>
+                        <Route exact path="/" />
+                        <Route path="/new" component={NewCard} />
+                        {/*<Route path="/edit/:card_id" component={EditCard} />*/}
+                    </KanbanBoardContainer>
+                </Route>
+
+            </Router>
+        )
+    }
+}

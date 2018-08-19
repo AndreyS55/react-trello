@@ -5,8 +5,7 @@ import marked from 'marked';
 import { DragSource, DropTarget } from 'react-dnd';
 import constants from './constants';
 import CheckList from './CheckList';
-
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 let titlePropType = (props, propName, componentName) => {
     if (props[propName]) {
@@ -61,7 +60,6 @@ class Card extends Component {
     toggleDetails() {
         this.setState({showDetails: !this.state.showDetails});
     }
-
 
     render() {
         const { connectDragSource, connectDropTarget } = this.props;

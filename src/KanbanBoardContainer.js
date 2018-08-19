@@ -313,7 +313,7 @@ class KanbanBoardContainer extends Component {
     }
 
     render() {
-        let kanbanBoard = this.props.children && React.cloneElement(this.props.children, {
+        let kanbanBoard = this.props.children && React.cloneElement(KanbanBoard, {
             cards: this.state.cards,
             taskCallbacks:{
                 toggle: this.toggleTask.bind(this),
@@ -329,7 +329,26 @@ class KanbanBoardContainer extends Component {
             }
         });
 
-        return kanbanBoard;
+        return (
+            <React.Fragment>
+                <KanbanBoard
+                    cards={this.state.cards}
+                    taskCallbacks={{
+                        toggle: this.toggleTask.bind(this),
+                        delete: this.deleteTask.bind(this),
+                        add: this.addTask.bind(this)}}
+                    cardCallbacks={{
+                        addCard: this.addCard.bind(this),
+                        updateCard: this.updateCard.bind(this),
+                        updateStatus: this.updateCardStatus,
+                        updatePosition: this.updateCardPosition,
+                        persistCardDrag: this.persistCardDrag.bind(this)
+                    }}
+                />
+                {this.props.children}
+            </React.Fragment>
+
+        );
     }
 
 }

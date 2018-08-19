@@ -26,7 +26,7 @@ class NewCard extends Component{
     }
 
     handleClose(e){
-        this.props.history.pushState(null,'/');
+        this.props.history.push('/');
     }
 
     render(){
