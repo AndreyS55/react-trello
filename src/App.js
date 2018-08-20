@@ -1,9 +1,17 @@
 import React from 'react';
 import {render} from 'react-dom';
+import { Router, Route } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import KanbanBoardContainer from './KanbanBoardContainer';
+import KanbanBoard from './KanbanBoard';
+import EditCard from './EditCard';
+import NewCard from './NewCard';
+import { Wrapper } from './Wrapper'
 
-//создаем массив cardList со списком задач; в дальнейшем список задач будет поступать с сервера;
-let cardsList = [
+export const history = createHistory();
+
+
+/*let cardsList = [
     {
         id: 1,
         title: "Read the Book",
@@ -36,6 +44,27 @@ let cardsList = [
             }
         ]
     }
-];
+];*/
 
-render(<KanbanBoardContainer />, document.getElementById('root'));
+// render((
+//
+// ), document.getElementById('root'));
+//
+// export default App;
+
+export class App extends React.Component {
+    render() {
+        return(
+            <Router history={history}>
+                <Route path="/">
+                    <KanbanBoardContainer>
+                        <Route exact path="/" />
+                        <Route path="/new" component={NewCard} />
+                        {/*<Route path="/edit/:card_id" component={EditCard} />*/}
+                    </KanbanBoardContainer>
+                </Route>
+
+            </Router>
+        )
+    }
+}
